@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TaskPaneApp">
+  <Id>5e4eddd2-2019-4823-ba0d-2e6964e0a7e8</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>SPCrowd</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Delve Office Add-in"/>
+  <Description DefaultValue="Allows to add/remove documents to Delve and manage Boards efficiently in SharePoint Online"/>
+  <AppDomains>
+    <AppDomain>https://login.windows.net</AppDomain>
+    <AppDomain>https://login.microsoftonline.net</AppDomain>
+    <AppDomain>https://login.microsoftonline.com</AppDomain>
+    <AppDomain>https://fancycoder.azurewebsites.net</AppDomain>
+<AppDomain>https://fancycoder.sharepoint.com</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Document"/>
+    <Host Name="Workbook"/>
+    <Host Name="Presentation"/>
+    <Host Name="Project"/>
+  </Hosts>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://fancycoder.azurewebsites.net/index.html"/>
+  </DefaultSettings>
+  <Permissions>ReadDocument</Permissions>
+</OfficeApp>

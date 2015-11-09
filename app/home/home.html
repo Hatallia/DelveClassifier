@@ -1,0 +1,43 @@
+<div class="ms-Grid">
+	<div class="ms-Grid-row mv-form">
+		<div class="ms-Grid-col ms-u-sm12">
+			<div class="ms-TextField ms-TextField--placeholder">
+				<label class="ms-Label">Search for</label>
+				<input class="ms-TextField-field" type="text" ng-keydown="vm.searchQueryKeyDown($event)" ng-model="vm.searchQuery">
+			</div>
+			<button class="ms-Button ms-Button--primary" ng-disabled="vm.searchQuery.length < 1" ng-click="vm.findDocuments()">
+				<span class="ms-Button-label">Find documents</span>
+			</button>
+		</div>
+	</div>
+	<div class="ms-Grid-row" ng-show="vm.loading === true">
+		<div class="ms-Grid-col ms-u-sm12">
+			<div class="mv-spinner-wrapper">
+				<div class="mv-spinner"></div>
+				<div class="ms-font-l">
+					Looking for documents...
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ms-Grid-row" ng-show="vm.hasSearched === true && vm.loading === false && vm.documents.length > 0">
+		<div class="ms-Grid-col ms-u-sm12">
+			<ul class="ms-List">
+				<li class="ms-ListItem ms-ListItem--document" ng-repeat="document in vm.documents">
+					<span class="ms-ListItem-primaryText"><a href="{{::document.url}}" target="_blank">{{::document.title}}</a></span>
+					<span class="ms-ListItem-secondaryText" ng-bind-html="document.summary"></span>
+					<span class="ms-ListItem-tertiaryText"><a href="{{::document.siteUrl}}" target="_blank">{{::document.siteTitle}}</a></span>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="ms-Grid-row" ng-show="vm.hasSearched === true && vm.loading === false && vm.documents.length === 0" class="mv-message">
+		<div class="ms-Grid-col ms-u-sm12">
+			<div class="ms-font-l ms-bgColor-yellow mv-message">No documents found</div>
+		</div>
+	</div>
+</div>
+<script>
+	jQuery('.ms-TextField').TextField();
+	fabric.Spinner(jQuery('.mv-spinner')[0]).start();
+</script>

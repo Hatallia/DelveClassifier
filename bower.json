@@ -1,0 +1,11 @@
+{
+  "name": "sample-office-add-in",
+  "version": "0.1.0",
+  "dependencies": {
+    "angular": "~1.4.4",
+    "angular-route": "~1.4.4",
+    "angular-sanitize": "~1.4.4",
+    "jquery": "~1.9.1",
+    "microsoft.office.js": "*"
+  }
+}

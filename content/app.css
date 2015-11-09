@@ -1,0 +1,24 @@
+.mv-form {
+	padding-top: 8px;
+}
+
+.mv-spinner-wrapper {
+	text-align: center;
+	padding: 10px 0;
+}
+
+.mv-spinner .ms-Spinner-circle {
+	background-color: #005a9e;
+}
+
+.mv-spinner .ms-Spinner {
+	width: 32px;
+	height: 32px;
+	margin: 10px auto;
+}
+
+.mv-message {
+	padding: 0.5em;
+	margin: 8px auto;
+	text-align: center;
+}
