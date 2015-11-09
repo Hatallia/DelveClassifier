@@ -1,54 +1,9 @@
-<!--div class="ms-Grid">
-    <div class="ms-Grid-row mv-form">
-        <div class="ms-Grid-col ms-u-sm12">
-            <div class="ms-TextField ms-TextField--placeholder">
-                <label class="ms-Label">Search for</label>
-                <input class="ms-TextField-field" type="text" ng-keydown="vm.searchQueryKeyDown($   event)" ng-model="vm.searchQuery">
-            </div>
-            <button class="ms-Button ms-Button--primary" ng-disabled="vm.searchQuery.length < 1" ng-click="vm.findDocuments()">
-                <span class="ms-Button-label">Find documents</span>
-            </button>
-        </div>
-    </div>
-    <div class="ms-Grid-row" ng-show="vm.loading === true">
-        <div class="ms-Grid-col ms-u-sm12">
-            <div class="mv-spinner-wrapper">
-                <div class="mv-spinner"></div>
-                <div class="ms-font-l">
-                    Looking for documents...
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="ms-Grid-row" ng-show="vm.hasSearched === true && vm.loading === false && vm.documents.length > 0">
-        <div class="ms-Grid-col ms-u-sm12">
-            <ul class="ms-List">
-                <li class="ms-ListItem ms-ListItem--document" ng-repeat="document in vm.documents">
-                    <span class="ms-ListItem-primaryText"><a href="{{::document.url}}" target="_blank">{{::document.title}}</a></span>
-                    <span class="ms-ListItem-secondaryText" ng-bind-html="document.summary"></span>
-                    <span class="ms-ListItem-tertiaryText"><a href="{{::document.siteUrl}}" target="_blank">{{::document.siteTitle}}</a></span>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="ms-Grid-row" ng-show="vm.hasSearched === true && vm.loading === false && vm.documents.length === 0" class="mv-message">
-        <div class="ms-Grid-col ms-u-sm12">
-            <div class="ms-font-l ms-bgColor-yellow mv-message">No documents found</div>
-        </div>
-    </div>
-</div>
-<b>HOME</b>
-<script>
-    
-    jQuery('.ms-TextField').TextField();
-    fabric.Spinner(jQuery('.mv-spinner')[0]).start();
-</script-->
 <div id="content-header" class="ms-bgColor-themePrimary">
     <div class="icon">
         <img src="../Images/icon-header.png" height="80" width="80">
     </div>
     <div class="title">
-        <span class="ms-font-xxl ms-fontWeight-regular">Board Classifier</span>
+        <span class="ms-font-xxl ms-fontWeight-regular">Delve Classifier</span>
     </div>
 </div>
 
@@ -61,13 +16,7 @@
               <button class="ms-SearchBox-closeButton" ng-disabled="vm.searchQuery.length < 1" ng-click="vm.findDocuments()"><i class="ms-Icon ms-Icon--plus"></i></button>
             </div>
         </div>
-        <!--<div class="suggest-board">
-            <div class="ms-Button ms-Button--compound">
-                <span class="icon"><i class="ms-Icon ms-Icon--receiptCheck"></i></span>
-                <span class="ms-Button-label">Suggest me a board</span>
-                <span class="ms-Button-description">Click to suggest you relevant board</span>
-            </div>-->
-        </div>
+       
         <hr>
     </div>
 </div>
@@ -172,4 +121,4 @@
 
     //jQuery('.ms-TextField').TextField();
     //fabric.Spinner(jQuery('.mv-spinner')[0]).start();
-</script-->
+</script>

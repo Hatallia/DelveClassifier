@@ -10,12 +10,11 @@
   function homeController($scope, dataService) {
     var vm = this;
     vm.searchQuery = '';
-    vm.searchQueryKeyDown = searchQueryKeyDown;
+    // vm.searchQueryKeyDown = searchQueryKeyDown;
     vm.hasSearched = false;
     vm.loading = false;
     vm.documents = [];
-    vm.findDocuments = findDocuments;
-    vm.getAllBoards = dataService.getAllBoards;
+    vm.getAllBoards = getAllBoards;
     activate();
 
     function activate() {
@@ -38,21 +37,21 @@
     //     });
     // }
 
-    function searchQueryKeyDown($event) {
-      if ($event.keyCode === 13 &&
-        vm.searchQuery.length > 0) {
-        vm.findDocuments();
-      }
-      else {
-        return true;
-      }
-    }
+    // function searchQueryKeyDown($event) {
+    //   if ($event.keyCode === 13 &&
+    //     vm.searchQuery.length > 0) {
+    //     vm.findDocuments();
+    //   }
+    //   else {
+    //     return true;
+    //   }
+    // }
 
-    function findDocuments() {
+    function getAllBoards() {
       vm.loading = true;
       vm.documents.length = 0;
 
-      dataService.getDocuments(vm.searchQuery).then(function (documents) {
+      dataService.getAllBoards().then(function (documents) {
         documents.forEach(function (document) {
           vm.documents.push(document);
         });
