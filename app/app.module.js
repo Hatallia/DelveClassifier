@@ -21,7 +21,9 @@
     Office.initialize = function () {
       console.log(">>> Office.initialize()");
       angular.bootstrap(jQuery('#container'), ['officeAddin']);
+
     };
+     //angular.bootstrap(jQuery('#container'), ['officeAddin']);   
   }
   else {
     jQuery(function() {
