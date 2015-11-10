@@ -11,8 +11,9 @@
     
     // public signature of the service
     return {
-      getDocuments: getDocuments,
-      getAllBoards: getAllBoards
+      getFilteredBoards: getFilteredBoards,
+      getAllBoards: getFilteredBoards,
+      getBoardDocuments: getBoardDocuments
     };
 
     /** *********************************************************** */
@@ -36,13 +37,12 @@
       return value;
     }
     
-    function getDocuments(query) {
+   
+  function getBoardDocuments(board)
+  {
       var deferred = $q.defer();
- var searchQuery = "?QueryText=%27Path:TAG://PUBLIC/?NAME=" + query + "%27&Properties=%27IncludeExternalContent:true%27&SelectProperties=%27DocId,Title,Path%27&RankingModelId=%270c77ded8-c3ef-466d-929d-905670ea1d72%27";
- 
-    searchQuery = "?QueryText=%27Path:TAG://PUBLIC/?NAME=*%27&Properties=%27IncludeExternalContent:true%27&SelectProperties=%27DocId,Title,Path%27&RankingModelId=%270c77ded8-c3ef-466d-929d-905670ea1d72%27";
-
-    $http({
+      var searchQuery = "?QueryText=%27*%27&Properties=%27GraphQuery:actor(" + board.docId + "\,action\:1045)%27&RankingModelId=%270c77ded8-c3ef-466d-929d-905670ea1d72%27";
+      $http({
         url: sharePointUrl + '/_api/search/query' + searchQuery,
         method: 'GET',
         headers: {
@@ -50,7 +50,52 @@
         }
       }).success(function (data) {
 
-      	///deferred.resolve([{url:"",summary:"",title:data, siteUrl:"",siteTitle:""}]);
+        var documents = [];
+
+        if (data.PrimaryQueryResult !== null) {
+          data.PrimaryQueryResult.RelevantResults.Table.Rows.forEach(function (row) {
+            var cells = row.Cells;
+
+            var url = getValueFromResults('ServerRedirectedURL', cells);
+            if (url === null) {
+              url = getValueFromResults('Path', cells);
+            }
+
+            documents.push({
+              url: url,
+              title: getValueFromResults('Title', cells)           
+            });
+          });
+        }
+        deferred.resolve(documents);
+      
+      }).error(function (err) {
+      
+        deferred.reject(err);
+      
+      });
+
+      return deferred.promise;
+  }
+
+function getFilteredBoards(query) {
+  
+  
+  var deferred = $q.defer();
+
+  var searchQuery = "?QueryText=%27Path:TAG://PUBLIC/?NAME=*%27&Properties=%27IncludeExternalContent:true%27&SelectProperties=%27DocId,Title,Path%27&RankingModelId=%270c77ded8-c3ef-466d-929d-905670ea1d72%27";
+ 
+  if (query != undefined && query.length > 0)
+  {
+      searchQuery = "?QueryText=%27Path:TAG://PUBLIC/?NAME=" + query + "*%27&Properties=%27IncludeExternalContent:true%27&SelectProperties=%27DocId,Title,Path%27&RankingModelId=%270c77ded8-c3ef-466d-929d-905670ea1d72%27";
+  }
+       $http({
+        url: sharePointUrl + '/_api/search/query' + searchQuery,
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json;odata=nometadata'
+        }
+      }).success(function (data) {
 
         var documents = [];
 
@@ -66,67 +111,23 @@
             documents.push({
               url: url,
               title: getValueFromResults('Title', cells),
-              summary: getValueFromResults('HitHighlightedSummary', cells).replace(/<(\/)?c\d>/g, '<$1mark>').replace(/<ddd\/>/g, ''),
-              siteUrl: getValueFromResults('SPWebUrl', cells),
-              siteTitle: getValueFromResults('SiteTitle', cells)
+              docId: getValueFromResults('DocId', cells)            
             });
           });
         }
 
-        deferred.resolve(documents);
+        //Now we  will try to get where the document is added to.
+              deferred.resolve(documents);
       }).error(function (err) {
         deferred.reject(err);
       });
 
       return deferred.promise;
-    }
+}
+
+
     
-  
-
-
-
-
-
- function getAllBoards() {
-      var deferred = $q.defer();
-
-   var searchQuery = "?QueryText=%27Path:TAG://PUBLIC/?NAME=*%27&Properties=%27IncludeExternalContent:true%27&SelectProperties=%27DocId,Title,Path%27&RankingModelId=%270c77ded8-c3ef-466d-929d-905670ea1d72%27";
-
-    $http({
-        url: sharePointUrl + '/_api/search/query' + searchQuery,
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json;odata=nometadata'
-        }
-      }).success(function (data) {
-
-        var documents = [];
-
-        if (data.PrimaryQueryResult !== null) {
-          data.PrimaryQueryResult.RelevantResults.Table.Rows.forEach(function (row) {
-            var cells = row.Cells;
-
-            var url = getValueFromResults('ServerRedirectedURL', cells);
-            if (url === null) {
-              url = getValueFromResults('Path', cells);
-            }
-
-            documents.push({
-              url: url,
-              title: getValueFromResults('Title', cells)              
-            });
-          });
-        }
-
-        deferred.resolve(documents);
-      }).error(function (err) {
-        deferred.reject(err);
-      });
-
-      return deferred.promise;
-    }
-    
-  }
+}
 
 
 })();
