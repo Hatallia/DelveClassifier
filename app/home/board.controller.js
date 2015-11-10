@@ -59,9 +59,9 @@
         }
 
         $board.toggleClass('opened');
-        $board.siblings('.board').find('.board-icon .ms-Icon').removeClass('ms-Icon--caretDownRight').addClass('ms-Icon--caretRightOutline');
-        $board.siblings('.board').removeClass('opened');
-        $board.siblings('.board').find('.board-files').hide('fast');
+        //$board.siblings('.board').find('.board-icon .ms-Icon').removeClass('ms-Icon--caretDownRight').addClass('ms-Icon--caretRightOutline');
+        //$board.siblings('.board').removeClass('opened');
+        //$board.siblings('.board').find('.board-files').hide('fast');
         return false;
     }
 
