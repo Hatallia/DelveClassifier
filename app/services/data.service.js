@@ -41,7 +41,7 @@
   function getBoardDocuments(board)
   {
       var deferred = $q.defer();
-      var searchQuery = "?QueryText=%27*%27&Properties=%27GraphQuery:actor(" + board.docId + "\,action\:1045)%27&RankingModelId=%270c77ded8-c3ef-466d-929d-905670ea1d72%27";
+      var searchQuery = "?QueryText=%27*%27&Properties=%27GraphQuery:actor(" + board.docId + "\\,action\\:1045)%27&RankingModelId=%270c77ded8-c3ef-466d-929d-905670ea1d72%27";
       $http({
         url: sharePointUrl + '/_api/search/query' + searchQuery,
         method: 'GET',

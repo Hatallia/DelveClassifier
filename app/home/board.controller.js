@@ -13,7 +13,7 @@
 
     vm.loading = false;
     vm.loaded = false;
-    vm.documents = [];
+    $scope.boardDocuments = [];
     vm.currentBoard = null;
     
     
@@ -59,20 +59,20 @@
         }
 
         $board.toggleClass('opened');
-        $board.siblings('.board').find('.board-icon .ms-Icon').removeClass('ms-Icon--caretDownRight').addClass('ms-Icon--caretRightOutline');
-        $board.siblings('.board').removeClass('opened');
-        $board.siblings('.board').find('.board-files').hide('fast');
+        //$board.siblings('.board').find('.board-icon .ms-Icon').removeClass('ms-Icon--caretDownRight').addClass('ms-Icon--caretRightOutline');
+        //$board.siblings('.board').removeClass('opened');
+        //$board.siblings('.board').find('.board-files').hide('fast');
         return false;
     }
 
     function getBoardDocuments(board) {
       if (vm.loaded || vm.loading) return;
       vm.loading = true;
-      vm.documents.length = 0;
+      $scope.boardDocuments.length = 0;
 
       dataService.getBoardDocuments(board).then(function (documents) {
         documents.forEach(function (document) {
-          vm.documents.push(document);
+          $scope.boardDocuments.push(document);
         });
 
         vm.loading = false;
