@@ -24,61 +24,32 @@
     <div id="content-main">
         <div class="padding" ng-show="vm.hasSearched === true && vm.loading === false && vm.documents.length > 0">
 
-            <div class="board opened" ng-repeat="document in vm.documents">
-                <div class="board-name">
-                    <span class="board-icon"><i class="ms-Icon ms-Icon--caretDownRight"></i></span>
-                    <span class="board-title">{{::document.title}}</span>
-                    <span class="board-action">
-                        <i class="ms-Icon ms-Icon--link"></i>
-                    </span>
-                </div>
-                <div class="board-files">
-                    <div class="ms-Table">
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell"><i class="ms-Icon ms-Icon--document"></i>Continent</span>
-                            <span class="ms-Table-cell">
-                                <button class="ms-Callout-close">
-                                    <i class="ms-Icon ms-Icon--x"></i>
-                                </button>
-                            </span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell"><i class="ms-Icon ms-Icon--document"></i>North America</span>
-                            <span class="ms-Table-cell">
-                                <button class="ms-Callout-close">
-                                    <i class="ms-Icon ms-Icon--x"></i>
-                                </button>
-                            </span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell"><i class="ms-Icon ms-Icon--document"></i>North America</span>
-                            <span class="ms-Table-cell">
-                                <button class="ms-Callout-close">
-                                    <i class="ms-Icon ms-Icon--x"></i>
-                                </button>
-                            </span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell"><i class="ms-Icon ms-Icon--document"></i>Florida</span>
-                            <span class="ms-Table-cell">
-                                <button class="ms-Callout-close">
-                                    <i class="ms-Icon ms-Icon--x"></i>
-                                </button>
-                            </span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell"><i class="ms-Icon ms-Icon--document"></i>State of Sau Paulo</span>
-                            <span class="ms-Table-cell">
-                                <button class="ms-Callout-close">
-                                    <i class="ms-Icon ms-Icon--x"></i>
-                                </button>
-                            </span>
+            <div class="board" ng-repeat="document in vm.documents">
+            <div ng-controller="boardController" ng-init="currentBoard=document">                   
+                   <div class="board-name" ng-click="toggleBoardSelected($event)">
+                        <span class="board-icon" ng-click="expandCollapsBoard($event, document)"><i class="ms-Icon ms-Icon--caretRightOutline"></i></span>
+                        <span class="board-title">{{::currentBoard.title}}</span>
+                        <span class="board-action">
+                            <i class="ms-Icon ms-Icon--link"></i>
+                        </span>
+                    </div>
+                    <div class="board-files" ng-repeat="document in boardController.documents">
+                        <div class="ms-Table">
+                            <div class="ms-Table-row">
+                                <span class="ms-Table-cell"><i class="ms-Icon ms-Icon--document"></i><a href="{{::document.url}}">{{::document.title}}</a></span>
+                                <span class="ms-Table-cell">
+                                    <button class="ms-Callout-close">
+                                        <i class="ms-Icon ms-Icon--x"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="board">
+            <!--div class="board">
                 <div class="board-name">
                     <span class="board-icon"><i class="ms-Icon ms-Icon--caretRightOutline"></i></span>
                     <span class="board-title">Demo Presentation</span>
@@ -96,11 +67,12 @@
                         <i class="ms-Icon ms-Icon--link"></i>
                     </span>
                 </div>
-            </div>
+            </div-->
         </div>
     </div>
 
     <div id="content-footer"></div>
+     <div>{{vm.docLocation}}</div>
 
     <!--script type="text/javascript" src="../Scripts/jquery.fabric.min.js"></script-->
     <script type="text/javascript">
