@@ -10,11 +10,13 @@
   function homeController($scope, dataService) {
     var vm = this;
     vm.searchQuery = '';
-    // vm.searchQueryKeyDown = searchQueryKeyDown;
+    vm.searchQueryKeyDown = searchQueryKeyDown;
     vm.hasSearched = false;
     vm.loading = false;
     vm.documents = [];
+    vm.docLocation = "";
     vm.getAllBoards = getAllBoards;
+    vm.getFilteredBoards = getFilteredBoards;
     activate();
 
     function activate() {
@@ -22,8 +24,25 @@
       //   Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, selectedTextChanged);
       // }
       vm.getAllBoards();
+
+      getDocumentLocation();
     }
-    
+
+    function getDocumentLocation()
+    {
+      //Note: This will return "undefined" when the document is embedded in a webpage.
+      Office.context.document.getFilePropertiesAsync(
+        function (asyncResult) {
+          if (asyncResult.status == "failed") {
+            //TODO: later.
+            //showMessage("Action failed with error: " + asyncResult.error.message);
+          } else {
+            vm.docLocation = asyncResult.value.url;
+          }
+        }
+      );
+    }
+
     // function selectedTextChanged() {
     //   Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
     //     function (result) {
@@ -37,15 +56,29 @@
     //     });
     // }
 
-    // function searchQueryKeyDown($event) {
-    //   if ($event.keyCode === 13 &&
-    //     vm.searchQuery.length > 0) {
-    //     vm.findDocuments();
-    //   }
-    //   else {
-    //     return true;
-    //   }
-    // }
+    function searchQueryKeyDown($event) {
+      if ($event.keyCode === 13) {
+        //TODO: Optimization: get from current array.
+        vm.getFilteredBoards(vm.searchQuery);
+      }
+      else {
+        return true;
+      }
+    }
+
+    function getFilteredBoards(query) {
+      vm.loading = true;
+      vm.documents.length = 0;
+
+      dataService.getFilteredBoards(query).then(function (documents) {
+        documents.forEach(function (document) {
+          vm.documents.push(document);
+        });
+
+        vm.loading = false;
+        vm.hasSearched = true;
+      });
+    }
 
     function getAllBoards() {
       vm.loading = true;
