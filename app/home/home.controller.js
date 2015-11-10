@@ -57,8 +57,9 @@
     // }
 
     function searchQueryKeyDown($event) {
-      if ($event.keyCode === 13) {
-        //TODO: Optimization: get from current array.
+      if ($event.keyCode === 13 || 
+        vm.searchQuery.length > 2) {
+        
         vm.getFilteredBoards(vm.searchQuery);
       }
       else {
