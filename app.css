@@ -83,7 +83,8 @@
 #content-main {
     background: #FFFFFF;
     position: fixed;
-    top: 240px;
+    /*top: 240px; */ /* For suggest board button */
+    top: 153px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -101,7 +102,18 @@
 }
 
 .board-name:hover {
-    background: #F4F4F4;
+    background: #0078D7;
+    color: #FFFFFF;
+}
+
+.board.opened .board-name {
+    background: #0078D7;
+    color: #FFFFFF;
+}
+
+.board.selected .board-name {
+    background: #BAD80A;
+    color: #FFFFFF;
 }
 
 .board-icon {
@@ -129,13 +141,9 @@
     cursor: pointer;
 }
 
-.board.opened .board-name {
-    background: #F4F4F4;
-}
-
-.board.selected .board-name {
-    background: #BAD80A;
-    color: #FFFFFF;
+.board-files {
+    /*display: none;*/
+    width: 100% !important;
 }
 
 .board-files,
@@ -150,7 +158,7 @@
 }
 
 .board-files .ms-Table-row:hover {
-    background: #F8F8F8;
+    background: #F4F4F4;
 }
 
 .board-files .ms-Table-row:first-child {
