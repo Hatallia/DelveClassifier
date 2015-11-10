@@ -182,12 +182,10 @@
     right: 6px;
     top: 4px;
     width: 22px;
-    display: none;
 }
 
 .board-files .ms-Callout-close:hover {
     background: none;
-    display: none;
 }
 
 
