@@ -23,9 +23,8 @@
 
     <div id="content-main">
         <div class="padding" ng-show="vm.hasSearched === true && vm.loading === false && vm.documents.length > 0">
-
-            <div  ng-repeat="document in vm.documents" ng-class="vm.selected?'board selected':'board'">
-            <div ng-controller="boardController as bc" ng-init="loadBoardDocuments(currentBoard=document, this, $event)">                   
+            <div  ng-repeat="document in vm.documents">
+                <div ng-controller="boardController as bc" ng-init="loadBoardDocuments(currentBoard=document, this, $event)" ng-class="bc.selected?'board selected':'board'" ng-show="bc.visibleInFilter">                   
                    <div class="board-name" ng-click="toggleBoardSelected($event, document)">
                         <span class="board-icon" ng-click="expandCollapsBoard($event)"><i class="ms-Icon ms-Icon--caretRightOutline"></i></span>
                         <span class="board-title">{{::currentBoard.title}}</span>
@@ -47,7 +46,7 @@
                             </div>
                         </div>
                         <div class="board-files" ng-show="bc.noDocs()">
-                            THERE IS NO FILES
+                            THERE ARE NO FILES
                         </div>
                         <div class="board-files" ng-hide="bc.loaded">
                             LOADING...
@@ -65,6 +64,7 @@
                     </span>
                 </div>
             </div>
+
             <div class="board selected">
                 <div class="board-name">
                     <span class="board-icon"><i class="ms-Icon ms-Icon--caretRightOutline"></i></span>
@@ -85,14 +85,17 @@
         /*if ($.fn.TextField) {
             $('.ms-TextField').TextField();
         }*/
+
         if ($.fn.SearchBox) {
             $('.ms-SearchBox').SearchBox();
         }
+
         /*$('.suggest-board .ms-Button').click(function() {
             $(this).toggleClass('selected');
             $(this).find('.icon').toggleClass('ms-u-slideRightIn40');
         });*/
     });
+
     //jQuery('.ms-TextField').TextField();
     //fabric.Spinner(jQuery('.mv-spinner')[0]).start();
 </script>

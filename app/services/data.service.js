@@ -55,10 +55,10 @@
                     data.PrimaryQueryResult.RelevantResults.Table.Rows.forEach(function(row) {
                         var cells = row.Cells;
 
-                        var url = getValueFromResults('ServerRedirectedURL', cells);
-                        if (url === null) {
-                            url = getValueFromResults('Path', cells);
-                        }
+                        var url = getValueFromResults('Path', cells);
+                        /*if (url === null) {
+                            url = getValueFromResults('ServerRedirectedURL', cells);
+                        }*/
 
                         documents.push({
                             url: url,
@@ -104,10 +104,10 @@
                         data.PrimaryQueryResult.RelevantResults.Table.Rows.forEach(function(row) {
                             var cells = row.Cells;
 
-                            var url = getValueFromResults('Path', cells);
-                            // if (url === null) {
-                            //     url = getValueFromResults('ServerRedirectedURL', cells);
-                            // }
+                            var url = getValueFromResults('ServerRedirectedURL', cells);
+                            if (url === null) {
+                                 url = getValueFromResults('Path', cells);
+                            }
 
                             documents.push({
                                 url: url,

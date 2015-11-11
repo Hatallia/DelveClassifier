@@ -13,6 +13,7 @@
 
     vm.loading = false;
     vm.loaded = false;
+    vm.visibleInFilter = true;
     $scope.boardDocuments = [];
     vm.currentBoard = null;
      vm.noDocs = function(){return $scope.boardDocuments.length == 0;}
