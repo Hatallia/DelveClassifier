@@ -92,7 +92,7 @@
 }
 
 .board {
-    border-bottom: 1px solid #F4F4F4;
+    border-bottom: 10px solid #F4F4F4;
 }
 
 .board-name {
@@ -102,17 +102,16 @@
 }
 
 .board-name:hover {
-    background: #0078D7;
-    color: #FFFFFF;
+    background: rgba(0, 120, 215, 0.42);
 }
 
 .board.opened .board-name {
-    background: #0078D7;
-    color: #FFFFFF;
+    /*background: #0078D7;
+    color: #FFFFFF;*/
 }
 
 .board.selected .board-name {
-    background: #BAD80A;
+    background: #0078D7;
     color: #FFFFFF;
 }
 
