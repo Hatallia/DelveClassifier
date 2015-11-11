@@ -15,12 +15,14 @@
     vm.loaded = false;
     $scope.boardDocuments = [];
     vm.currentBoard = null;
+     vm.noDocs = function(){return $scope.boardDocuments.length == 0;}
     
     vm.docLocation = "";
 
     vm.getBoardDocuments = getBoardDocuments;
     $scope.toggleBoardSelected = toggleBoardSelected;
     $scope.expandCollapsBoard = expandCollapsBoard;
+      $scope.loadBoardDocuments = loadBoardDocuments;
     activate();
 
     function activate() {
@@ -48,10 +50,15 @@ function getDocumentLocation()
         }
       );
     }
-    function expandCollapsBoard(event, document){
-      expandCollapsBoardUI(event);
-      getBoardDocuments(document);
-    }
+
+     function loadBoardDocuments(board){
+    getBoardDocuments(board);
+     }         }
+     
+ function expandCollapsBoard(event){
+       expandCollapsBoardUI(event); 
+//getBoardDocuments(document);
+     }            
 
     function toggleBoardSelected(event, document){
       event.originalEvent.preventDefault();
@@ -94,6 +101,9 @@ function getDocumentLocation()
       dataService.getBoardDocuments(board).then(function (documents) {
         documents.forEach(function (document) {
           $scope.boardDocuments.push(document);
+          if (document.url == $scope.$parent.vm.docLocation){
+             $scope.$parent.vm.selected = true;
+          }
         });
 
         vm.loading = false;
