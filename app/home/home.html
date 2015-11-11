@@ -25,7 +25,7 @@
 
             <div class="board" ng-repeat="document in vm.documents">
             <div ng-controller="boardController" ng-init="currentBoard=document">                   
-                   <div class="board-name" ng-click="toggleBoardSelected($event)">
+                   <div class="board-name" ng-click="toggleBoardSelected($event, document)">
                         <span class="board-icon" ng-click="expandCollapsBoard($event, document)"><i class="ms-Icon ms-Icon--caretRightOutline"></i></span>
                         <span class="board-title">{{::currentBoard.title}}</span>
                         <span class="board-action">
@@ -68,8 +68,6 @@
     </div>
 
     <div id="content-footer"></div>
-     <div>{{vm.docLocation}}</div>
-
     <!--script type="text/javascript" src="../Scripts/jquery.fabric.min.js"></script-->
     <script type="text/javascript">
     $(document).ready(function () {
