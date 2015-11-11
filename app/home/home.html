@@ -1,3 +1,18 @@
+Skip to content
+This repository  
+Search
+Pull requests
+Issues
+Gist
+ @Hatallia
+ Unwatch 4
+  Star 0
+  Fork 0 Hatallia/DelveClassifier
+ Tree: 6c9708b33e  DelveClassifier/app/home/home.html
+6c9708b  2 hours ago
+@Sankledar Sankledar get current boards
+1 contributor
+RawBlameHistory     103 lines (92 sloc)  4.51 KB
 <div id="content-header" class="ms-bgColor-themePrimary">
     <div class="icon">
         <img src="../Images/icon-header.png" height="80" width="80">
@@ -12,7 +27,8 @@
         <div class="create-board">
             <div class="ms-SearchBox">
               <input class="ms-SearchBox-field" ng-keydown="vm.searchQueryKeyDown($event)" ng-model="vm.searchQuery">
-              <label class="ms-SearchBox-label"><i class="ms-SearchBox-icon ms-Icon ms-Icon--pencil"></i>Find a board...</label>             
+              <label class="ms-SearchBox-label"><i class="ms-SearchBox-icon ms-Icon ms-Icon--pencil"></i>Find a board...</label>
+              <button class="ms-SearchBox-closeButton" ng-disabled="vm.searchQuery.length < 1" ng-click="vm.findDocuments()"><i class="ms-Icon ms-Icon--plus"></i></button>
             </div>
         </div>
        
@@ -23,25 +39,35 @@
     <div id="content-main">
         <div class="padding" ng-show="vm.hasSearched === true && vm.loading === false && vm.documents.length > 0">
 
-            <div class="board" ng-repeat="document in vm.documents">
-            <div ng-controller="boardController" ng-init="currentBoard=document">                   
+            <div  ng-repeat="document in vm.documents" ng-class="vm.selected?'board selected':'board'">
+            <div ng-controller="boardController as bc" ng-init="loadBoardDocuments(currentBoard=document, this, $event)">                   
                    <div class="board-name" ng-click="toggleBoardSelected($event, document)">
-                        <span class="board-icon" ng-click="expandCollapsBoard($event, document)"><i class="ms-Icon ms-Icon--caretRightOutline"></i></span>
+                        <span class="board-icon" ng-click="expandCollapsBoard($event)"><i class="ms-Icon ms-Icon--caretRightOutline"></i></span>
                         <span class="board-title">{{::currentBoard.title}}</span>
                         <span class="board-action">
                             <i class="ms-Icon ms-Icon--link"></i>
                         </span>
                     </div>
-                    <div class="board-files" ng-repeat="document in boardDocuments">
-                        <div class="ms-Table">
-                            <div class="ms-Table-row">
-                                <span class="ms-Table-cell"><i class="ms-Icon ms-Icon--document"></i><a href="{{::document.url}}">{{::document.title}}</a></span>
-                                <span class="ms-Table-cell">                                    
-                                </span>
+                    <div class="board-files" style="display: none;">
+                        <div ng-repeat="document in boardDocuments">
+                            <div class="ms-Table" ng-show="bc.loaded">
+                                <div class="ms-Table-row">
+                                    <span class="ms-Table-cell"><i class="ms-Icon ms-Icon--document"></i><a href="{{::document.url}}">{{::document.title}}</a></span>
+                                    <span class="ms-Table-cell">
+                                        <button class="ms-Callout-close">
+                                            <i class="ms-Icon ms-Icon--x"></i>
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
-                            
                         </div>
-                    </div>
+                        <div class="board-files" ng-show="bc.noDocs()">
+                            THERE IS NO FILES
+                        </div>
+                        <div class="board-files" ng-hide="bc.loaded">
+                            LOADING...
+                        </div>
+                    </div>                    
                 </div>
             </div>
 
@@ -54,7 +80,6 @@
                     </span>
                 </div>
             </div>
-
             <div class="board selected">
                 <div class="board-name">
                     <span class="board-icon"><i class="ms-Icon ms-Icon--caretRightOutline"></i></span>
@@ -68,23 +93,21 @@
     </div>
 
     <div id="content-footer"></div>
+
     <!--script type="text/javascript" src="../Scripts/jquery.fabric.min.js"></script-->
     <script type="text/javascript">
     $(document).ready(function () {
         /*if ($.fn.TextField) {
             $('.ms-TextField').TextField();
         }*/
-
         if ($.fn.SearchBox) {
             $('.ms-SearchBox').SearchBox();
         }
-
         /*$('.suggest-board .ms-Button').click(function() {
             $(this).toggleClass('selected');
             $(this).find('.icon').toggleClass('ms-u-slideRightIn40');
         });*/
     });
-
     //jQuery('.ms-TextField').TextField();
     //fabric.Spinner(jQuery('.mv-spinner')[0]).start();
 </script>
