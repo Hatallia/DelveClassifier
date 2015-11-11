@@ -1,8 +1,8 @@
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 function AddToDelve(board, docLocation) {
-
-    var appWebUrl = window.location.protocol + "//" + window.location.host + _spPageContextInfo.webServerRelativeUrl;
+    var host = window.location.protocol + "//" + window.location.host;
+    var appWebUrl = host + _spPageContextInfo.webServerRelativeUrl;
     
     var data1 = {
         "signals": [{"Type":"Tag","TagName":board, "DocumentUrl" : docLocation},
@@ -20,11 +20,12 @@ function AddToDelve(board, docLocation) {
         var requestHeaders = {
             "Accept": "application/json;odata=verbose",            
             "X-RequestDigest": validRequestDigest,
-	        "X-Delve-ClientPlatform":"DelveWeb"
+            "X-Delve-ClientPlatform":"DelveWeb",
+            "Access-Control-Allow-Origin": host
         };
 
         jQuery.ajax({
-            url: appWebUrl + "_vti_bin/DelveApi.ashx/signals/batch",
+            url: appWebUrl + "/_vti_bin/DelveApi.ashx/signals/batch",
             type: "POST",
             data: JSON.stringify(data1.signals),
             contentType: "application/json;odata=verbose",
