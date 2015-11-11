@@ -110,6 +110,10 @@
     color: #FFFFFF;*/
 }
 
+.ms-SearchBox-closeButton{
+    display: none !important;
+}
+
 .board.selected .board-name {
     background: #0078D7;
     color: #FFFFFF;
