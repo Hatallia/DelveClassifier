@@ -53,7 +53,7 @@ function getDocumentLocation()
 
      function loadBoardDocuments(board){
     getBoardDocuments(board);
-     }         }
+     }         
      
  function expandCollapsBoard(event){
        expandCollapsBoardUI(event); 
