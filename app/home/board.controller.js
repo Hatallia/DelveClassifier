@@ -2,12 +2,12 @@
   'use strict';
 
   angular.module('officeAddin')
-    .controller('boardController', ['$scope', 'dataService', boardController]);
+    .controller('boardController', ['$scope', '$document', 'dataService', 'azureOrigin', boardController]);
 
   /**
    * Controller constructor
    */
-  function boardController($scope, dataService) {
+  function boardController($scope, $document, dataService, azureOrigin) {
     var vm = this;
     vm.selected = false;
 
@@ -16,7 +16,8 @@
     $scope.boardDocuments = [];
     vm.currentBoard = null;
     
-    
+    vm.docLocation = "";
+
     vm.getBoardDocuments = getBoardDocuments;
     $scope.toggleBoardSelected = toggleBoardSelected;
     $scope.expandCollapsBoard = expandCollapsBoard;
@@ -28,19 +29,39 @@
       // }
      // vm.getAllBoards();
 
-    //  getDocumentLocation();
+   
+      getDocumentLocation();
     }
 
+
+function getDocumentLocation()
+    {
+      //Note: This will return "undefined" when the document is embedded in a webpage.
+      Office.context.document.getFilePropertiesAsync(
+        function (asyncResult) {
+          if (asyncResult.status == "failed") {
+            //TODO: later.
+            //showMessage("Action failed with error: " + asyncResult.error.message);
+          } else {
+            vm.docLocation = asyncResult.value.url;
+          }
+        }
+      );
+    }
     function expandCollapsBoard(event, document){
       expandCollapsBoardUI(event);
       getBoardDocuments(document);
     }
 
-    function toggleBoardSelected(event){
+    function toggleBoardSelected(event, document){
       event.originalEvent.preventDefault();
       var elem = event.currentTarget;
       $(elem).parents(".board").toggleClass('selected');
       vm.selected = !vm.selected;
+
+      var message = {board: document.title, docLocation: vm.docLocation};
+
+      $document[0].getElementById("spProxy").contentWindow.postMessage(JSON.stringify(message), azureOrigin);
     }
 
     function expandCollapsBoardUI(event) {
