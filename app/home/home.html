@@ -23,9 +23,8 @@
 
     <div id="content-main">
         <div class="padding" ng-show="vm.hasSearched === true && vm.loading === false && vm.documents.length > 0">
-
-            <div  ng-repeat="document in vm.documents" ng-class="vm.selected?'board selected':'board'">
-            <div ng-controller="boardController as bc" ng-init="loadBoardDocuments(currentBoard=document, this, $event)">                   
+            <div  ng-repeat="document in vm.documents">
+                <div ng-controller="boardController as bc" ng-init="loadBoardDocuments(currentBoard=document, this, $event)" ng-class="bc.selected?'board selected':'board'" ng-show="bc.visibleInFilter">                   
                    <div class="board-name" ng-click="toggleBoardSelected($event)">
                         <span class="board-icon" ng-click="expandCollapsBoard($event)"><i class="ms-Icon ms-Icon--caretRightOutline"></i></span>
                         <span class="board-title">{{::currentBoard.title}}</span>
