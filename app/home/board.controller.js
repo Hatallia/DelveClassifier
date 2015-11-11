@@ -15,25 +15,26 @@
     vm.loaded = false;
     $scope.boardDocuments = [];
     vm.currentBoard = null;
+    vm.noDocs = function(){return $scope.boardDocuments.length == 0;}
     
     
     vm.getBoardDocuments = getBoardDocuments;
     $scope.toggleBoardSelected = toggleBoardSelected;
     $scope.expandCollapsBoard = expandCollapsBoard;
+    $scope.loadBoardDocuments = loadBoardDocuments;
     activate();
 
     function activate() {
-      // if (Office.context.document) {
-      //   Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, selectedTextChanged);
-      // }
-     // vm.getAllBoards();
-
-    //  getDocumentLocation();
+      
     }
 
-    function expandCollapsBoard(event, document){
+    function loadBoardDocuments(board){
+      getBoardDocuments(board);
+    }
+
+    function expandCollapsBoard(event){
       expandCollapsBoardUI(event);
-      getBoardDocuments(document);
+      //getBoardDocuments(document);
     }
 
     function toggleBoardSelected(event){
@@ -73,6 +74,9 @@
       dataService.getBoardDocuments(board).then(function (documents) {
         documents.forEach(function (document) {
           $scope.boardDocuments.push(document);
+          if (document.url == $scope.$parent.vm.docLocation){
+              $scope.$parent.vm.selected = true;
+          }
         });
 
         vm.loading = false;
