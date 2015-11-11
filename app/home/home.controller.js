@@ -2,46 +2,46 @@
   'use strict';
 
   angular.module('officeAddin')
-    .controller('homeController', ['$scope','$document', 'dataService', 'proxyHackUrl', homeController]);
+    .controller('homeController', ['$scope', 'dataService', homeController]);
 
   /**
    * Controller constructor
    */
-  function homeController($scope, $document, dataService,  proxyHackUrl) {
+  function homeController($scope, dataService) {
     var vm = this;
     vm.searchQuery = '';
     vm.searchQueryKeyDown = searchQueryKeyDown;
     vm.hasSearched = false;
     vm.loading = false;
     vm.documents = [];
-    
+    vm.docLocation = "";
     vm.getAllBoards = getAllBoards;
     vm.getFilteredBoards = getFilteredBoards;
-
     activate();
 
     function activate() {
       // if (Office.context.document) {
       //   Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, selectedTextChanged);
       // }
-
-      
-
       vm.getAllBoards();
 
-       var iframe = $document[0].createElement('iframe');
-      iframe.frameBorder=0;
-      iframe.width="1px";
-      iframe.height="1px";
-      iframe.id="spProxy";
-      iframe.setAttribute("src", proxyHackUrl);
-      $document[0].getElementById("content-footer").appendChild(iframe);
-
-
-      //getDocumentLocation();
+      getDocumentLocation();
     }
 
-    
+    function getDocumentLocation()
+    {
+      //Note: This will return "undefined" when the document is embedded in a webpage.
+      Office.context.document.getFilePropertiesAsync(
+        function (asyncResult) {
+          if (asyncResult.status == "failed") {
+            //TODO: later.
+            //showMessage("Action failed with error: " + asyncResult.error.message);
+          } else {
+            vm.docLocation = asyncResult.value.url;
+          }
+        }
+      );
+    }
 
     // function selectedTextChanged() {
     //   Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
