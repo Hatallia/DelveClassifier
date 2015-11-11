@@ -101,8 +101,8 @@ function getDocumentLocation()
       dataService.getBoardDocuments(board).then(function (documents) {
         documents.forEach(function (document) {
           $scope.boardDocuments.push(document);
-          if (document.url == $scope.$parent.vm.docLocation){
-             $scope.$parent.vm.selected = true;
+          if (document.url == vm.docLocation){
+             vm.selected = true;
           }
         });
 
