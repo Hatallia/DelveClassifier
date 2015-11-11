@@ -1,5 +1,17 @@
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
+
+window.addEventListener("message", receiveMessageFromDelveClassifier, false);
+
+function receiveMessageFromDelveClassifier(event)
+{
+  if (event.origin !== "https://fancycoder.azurewebsites.net")
+    return;
+
+  var message = JSON.parse(origin.data);
+  AddToDelve(message.board, message.docLocation);
+}
+
 function AddToDelve(board, docLocation) {
     var host = window.location.protocol + "//" + window.location.host;
     var appWebUrl = host + _spPageContextInfo.webServerRelativeUrl;
