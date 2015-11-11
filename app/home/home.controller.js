@@ -57,13 +57,25 @@
     // }
 
     function searchQueryKeyDown($event) {
-      if ($event.keyCode === 13 || 
-        vm.searchQuery.length > 2) {
+      var query = event.target.value.toLowerCase();
+      if (/*$event.keyCode === 13 ||*/ query.length > 2) {
         
-        vm.getFilteredBoards(vm.searchQuery);
+        $(".board").each(function (i, b) {
+          var brd = $(b);
+          if (brd.find(".board-title").text().toLowerCase().indexOf(query) >= 0){
+            brd.show();
+          }
+          else{
+            brd.hide();
+          }
+        });
+        //vm.getFilteredBoards(vm.searchQuery);
       }
       else {
-        return true;
+        $(".board").each(function (i, b) {
+          var brd = $(b);
+          brd.show();
+        });
       }
     }
 
