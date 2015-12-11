@@ -7,5 +7,7 @@
     "angular-sanitize": "~1.4.4",
     "jquery": "~1.9.1",
     "microsoft.office.js": "*"
+    "adal-angular": "~1.0.5",
+    "office-ui-fabric": "*"
   }
 }
