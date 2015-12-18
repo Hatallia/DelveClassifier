@@ -114,6 +114,11 @@
                                 title: getValueFromResults('Title', cells),
                                 docId: getValueFromResults('DocId', cells)
                             });
+			    
+                            documents.sort(function (a, b) {
+                                return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+                            });   
+
                         });
                     }
 
