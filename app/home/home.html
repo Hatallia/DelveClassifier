@@ -13,7 +13,7 @@
             <div class="ms-SearchBox">
               <input class="ms-SearchBox-field" ng-keyup="vm.searchQueryKeyDown($event)" ng-model="vm.searchQuery">
               <label class="ms-SearchBox-label"><i class="ms-SearchBox-icon ms-Icon ms-Icon--pencil"></i>Find a board...</label>
-              <button class="ms-SearchBox-closeButton" ng-disabled="vm.searchQuery.length < 1" ng-click="vm.findDocuments()"><i class="ms-Icon ms-Icon--plus"></i></button>
+              <button class="ms-SearchBox-closeButton"><i class="ms-Icon ms-Icon--x"></i></button>
             </div>
         </div>
        
@@ -29,7 +29,7 @@
                         <span class="board-icon" ng-click="expandCollapsBoard($event)"><i class="ms-Icon ms-Icon--caretRightOutline"></i></span>
                         <span class="board-title">{{::currentBoard.title}}</span>
                         <span class="board-action">
-                            <i class="ms-Icon ms-Icon--link"></i>
+                            <i class="ms-Icon ms-Icon--arrowUpRight"></i>
                         </span>
                     </div>
                     <div class="board-files" style="display: none;">

@@ -3,8 +3,35 @@
 
 /* Base styles
 ==============================================================================*/
+body {
+    color: #002646;
+}
 .padding {
     padding: 15px;
+}
+
+
+/* Animation
+==============================================================================*/
+.suggest-board .icon,
+.suggest-board .ms-Button-label,
+.suggest-board .ms-Button-description,
+.board-name,
+.board-files .ms-Table-row,
+.ms-SearchBox-field {
+    -webkit-transition: all 0.367s ease-in-out;
+    -moz-transition: all 0.367s ease-in-out;
+    -ms-transition: all 0.367s ease-in-out;
+    transition: all 0.367s ease-in-out;
+    transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+.board-files .ms-Table-row {
+    -webkit-transition: background-color 0.367s ease-in-out;
+    -moz-transition: background-color 0.367s ease-in-out;
+    -ms-transition: background-color 0.367s ease-in-out;
+    transition: background-color 0.367s ease-in-out;
+    transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
 }
 
 
@@ -56,20 +83,11 @@
     left: 14px;
     top: 6px;
     opacity: 0;
-    -webkit-transition: all 0.367s ease-in-out;
-    -moz-transition: all 0.367s ease-in-out;
-    -ms-transition: all 0.367s ease-in-out;
-    transition: all 0.367s ease-in-out;
 }
 
 .suggest-board .ms-Button-label,
 .suggest-board .ms-Button-description {
     margin-left: 0px;
-    -webkit-transition: all 0.367s ease-in-out;
-    -moz-transition: all 0.367s ease-in-out;
-    -ms-transition: all 0.367s ease-in-out;
-    transition: all 0.367s ease-in-out;
-    transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
 }
 
 .suggest-board .selected .ms-Button-label,
@@ -92,7 +110,12 @@
 }
 
 .board {
-    border-bottom: 10px solid #F4F4F4;
+    border: 1px solid #EAEAEA;
+    margin-bottom: 8px;
+}
+
+.board.opened {
+    border-color: #C7E0F4;
 }
 
 .board-name {
@@ -102,16 +125,15 @@
 }
 
 .board-name:hover {
-    background: rgba(0, 120, 215, 0.42);
+    background: #EAEAEA;
 }
 
 .board.opened .board-name {
-    /*background: #0078D7;
-    color: #FFFFFF;*/
+    background: #C7E0F4;
 }
 
-.ms-SearchBox-closeButton{
-    display: none !important;
+.board.selected {
+    border-color: #0078D7;
 }
 
 .board.selected .board-name {
@@ -137,10 +159,10 @@
 }
 
 .board-action {
-    font-size: 18px;
+    font-size: 14px;
     position: absolute;
     right: 5px;
-    top: 9px;
+    top: 12px;
     cursor: pointer;
 }
 
@@ -161,19 +183,17 @@
 }
 
 .board-files .ms-Table-row:hover {
-    background: #F4F4F4;
+    background: #E6F2FB;
 }
 
 .board-files .ms-Table-row:first-child {
     font-size: 14px;
-    color: #333;
+    color: #002646;
 }
 
 .board-files .ms-Table-row:first-child .ms-Table-cell {
     border: 0;
 }
-
-
 
 .board-files .ms-Icon {
     margin: 0 5px 0 5px;
@@ -246,6 +266,7 @@
 }
 
 .ms-SearchBox-label {
+    pointer-events: none;
     left: 0;
 }
 
@@ -257,6 +278,10 @@
 .ms-SearchBox-closeButton:hover {
     background-color: #005A9E !important;
     border-color: #005A9E !important;
+}
+
+.ms-SearchBox-field {
+    
 }
 
 .ms-SearchBox-field:focus,
@@ -283,7 +308,6 @@
     color: #FFFFFF !important;
 }
 
- 
 .ms-Button:hover .ms-Button-label, 
 .ms-Button:active .ms-Button-label,
 .ms-Button.selected .ms-Button-label {
