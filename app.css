@@ -166,6 +166,11 @@ body {
     cursor: pointer;
 }
 
+.board.selected .board-action i.ms-Icon--arrowUpRight{
+    color: white;
+}
+
+
 .board-files {
     /*display: none;*/
     width: 100% !important;

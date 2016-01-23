@@ -104,17 +104,22 @@
                         data.PrimaryQueryResult.RelevantResults.Table.Rows.forEach(function(row) {
                             var cells = row.Cells;
 
-                            var url = getValueFromResults('ServerRedirectedURL', cells);
-                            if (url === null) {
-                                 url = getValueFromResults('Path', cells);
-                            }
-
+                            //var url = getValueFromResults('ServerRedirectedURL', cells);
+                            //if (url === "") {
+                            //     url = getValueFromResults('Path', cells);
+                            //}
+                            var url = sharePointUrl +'_layouts/15/me.aspx?b='+ getValueFromResults('Title', cells);
+                            
                             documents.push({
                                 url: url,
                                 title: getValueFromResults('Title', cells),
                                 docId: getValueFromResults('DocId', cells)
                             });
                         });
+                        
+                    documents.sort(function (a, b) {
+                                return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+                        }); 
                     }
 
                     //Now we  will try to get where the document is added to.
