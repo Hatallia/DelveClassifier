@@ -1,18 +1,16 @@
 (function () {
-  'use strict';
+    'use strict';
 
-  angular.module('officeAddin')
-    .service('dataService', ['sharePointUrl', '$http', '$q', dataService]);
+    angular.module('officeAddin').service('dataService', ['sharePointUrl', '$http', '$q', dataService]);
 
-  /**
-   * Custom Angular service.
-   */
+    /**
+     * Custom Angular service.
+     */
     function dataService(sharePointUrl, $http, $q) {
 
         // public signature of the service
         return {
-            getFilteredBoards: getFilteredBoards,
-            getAllBoards: getFilteredBoards,
+            getAllBoards: getBoards,
             getBoardDocuments: getBoardDocuments
         };
 
@@ -20,7 +18,6 @@
 
         function getValueFromResults(key, results) {
             var value = '';
-
             if (results !== null &&
                 results.length > 0 &&
                 key !== null) {
@@ -33,10 +30,8 @@
                     }
                 }
             }
-
             return value;
         }
-
 
         function getBoardDocuments(board) {
             var deferred = $q.defer();
@@ -47,12 +42,12 @@
                 headers: {
                     'Accept': 'application/json;odata=nometadata'
                 }
-            }).success(function(data) {
+            }).success(function (data) {
 
                 var documents = [];
 
                 if (data.PrimaryQueryResult !== null) {
-                    data.PrimaryQueryResult.RelevantResults.Table.Rows.forEach(function(row) {
+                    data.PrimaryQueryResult.RelevantResults.Table.Rows.forEach(function (row) {
                         var cells = row.Cells;
 
                         var url = getValueFromResults('Path', cells);
@@ -68,7 +63,7 @@
                 }
                 deferred.resolve(documents);
 
-            }).error(function(err) {
+            }).error(function (err) {
 
                 deferred.reject(err);
 
@@ -77,102 +72,38 @@
             return deferred.promise;
         }
 
-        function getFilteredBoards(query) {
+        function getBoards() {
             var deferred = $q.defer();
-            var filtered = [];
-            if (query != undefined && query.length > 0) {
-                vm.documents.forEach(function(row) {
-                    if (row.title.indexOf(query) > 0) {
-                        filtered.push(row);
-                    }
-                });
-            } else {
-
-
-                var searchQuery = "?QueryText=%27Path:TAG://PUBLIC/?NAME=*%27&Properties=%27IncludeExternalContent:true%27&SelectProperties=%27DocId,Title,Path%27&RankingModelId=%270c77ded8-c3ef-466d-929d-905670ea1d72%27";
-                $http({
-                    url: sharePointUrl + '/_api/search/query' + searchQuery,
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json;odata=nometadata'
-                    }
-                }).success(function(data) {
-
-                    var documents = [];
-
-                    if (data.PrimaryQueryResult !== null) {
-                        data.PrimaryQueryResult.RelevantResults.Table.Rows.forEach(function(row) {
-                            var cells = row.Cells;
-
-                            //var url = getValueFromResults('ServerRedirectedURL', cells);
-                            //if (url === "") {
-                            //     url = getValueFromResults('Path', cells);
-                            //}
-                            var url = sharePointUrl +'_layouts/15/me.aspx?b='+ getValueFromResults('Title', cells);
-                            
-                            documents.push({
-                                url: url,
-                                title: getValueFromResults('Title', cells),
-                                docId: getValueFromResults('DocId', cells)
-                            });
+            var searchQuery = "?QueryText=%27Path:TAG://PUBLIC/?NAME=*%27&Properties=%27IncludeExternalContent:true%27&SelectProperties=%27DocId,Title,Path%27&RankingModelId=%270c77ded8-c3ef-466d-929d-905670ea1d72%27";
+            $http({
+                url: sharePointUrl + '/_api/search/query' + searchQuery,
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json;odata=nometadata'
+                }
+            }).success(function (data) {
+                var boards = [];
+                if (data.PrimaryQueryResult !== null) {
+                    data.PrimaryQueryResult.RelevantResults.Table.Rows.forEach(function (row) {
+                        var cells = row.Cells;
+                        var url = sharePointUrl + '_layouts/15/me.aspx?b=' + getValueFromResults('Title', cells);
+                        boards.push({
+                            url: url,
+                            title: getValueFromResults('Title', cells),
+                            docId: getValueFromResults('DocId', cells)
                         });
-                        
-                    documents.sort(function (a, b) {
-                                return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
-                        }); 
-                    }
+                    });
 
-                    //Now we  will try to get where the document is added to.
-                    deferred.resolve(documents);
-                }).error(function(err) {
-                    deferred.reject(err);
-                });
-
-
-// var searchQuery = "?QueryText=%27Path:TAG://PUBLIC/?NAME=*%27&Properties=%27IncludeExternalContent:true%27&SelectProperties=%27DocId,Title,Path%27&RankingModelId=%270c77ded8-c3ef-466d-929d-905670ea1d72%27";
-
-                // if (query != undefined && query.length > 0)
-                // {
-                //     searchQuery = "?QueryText=%27Path:TAG://PUBLIC/?NAME=" + query + "*%27&Properties=%27IncludeExternalContent:true%27&SelectProperties=%27DocId,Title,Path%27&RankingModelId=%270c77ded8-c3ef-466d-929d-905670ea1d72%27";
-                // }
-                //      $http({
-                //       url: sharePointUrl + '/_api/search/query' + searchQuery,
-                //       method: 'GET',
-                //       headers: {
-                //         'Accept': 'application/json;odata=nometadata'
-                //       }
-                //     }).success(function (data) {
-
-                //       var documents = [];
-
-                //       if (data.PrimaryQueryResult !== null) {
-                //         data.PrimaryQueryResult.RelevantResults.Table.Rows.forEach(function (row) {
-                //           var cells = row.Cells;
-
-                //           var url = getValueFromResults('ServerRedirectedURL', cells);
-                //           if (url === null) {
-                //             url = getValueFromResults('Path', cells);
-                //           }
-
-                //           documents.push({
-                //             url: url,
-                //             title: getValueFromResults('Title', cells),
-                //             docId: getValueFromResults('DocId', cells)            
-                //           });
-                //         });
-                //       }
-
-                //       //Now we  will try to get where the document is added to.
-                //             deferred.resolve(documents);
-                //     }).error(function (err) {
-                //       deferred.reject(err);
-                //     });
-
-                return deferred.promise;
-            }
+                    boards.sort(function (a, b) {
+                        return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+                    });
+                }
+                //Now we  will try to get where the document is added to.
+                deferred.resolve(boards);
+            }).error(function (err) {
+                deferred.reject(err);
+            });
+            return deferred.promise;
         }
-
-    }
-
-
+    }    
 })();

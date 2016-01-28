@@ -1,111 +1,80 @@
 (function () {
-  'use strict';
+    'use strict';
 
-  angular.module('officeAddin')
-    .controller('homeController', ['$scope','$document', 'dataService', 'proxyHackUrl', homeController]);
+    angular.module('officeAddin').controller('homeController', ['$scope', '$document', 'dataService', 'proxyHackUrl', homeController]);
 
-  /**
-   * Controller constructor
-   */
-  function homeController($scope, $document, dataService,  proxyHackUrl) {
-    var vm = this;
-    vm.searchQuery = '';
-    vm.searchQueryKeyDown = searchQueryKeyDown;
-    vm.hasSearched = false;
-    vm.loading = false;
-    vm.documents = [];
-    
-    vm.getAllBoards = getAllBoards;
-    vm.getFilteredBoards = getFilteredBoards;
-
-    activate();
-
-    function activate() {
-      // if (Office.context.document) {
-      //   Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, selectedTextChanged);
-      // }
-
-      
-
-      vm.getAllBoards();
-
-       var iframe = $document[0].createElement('iframe');
-      iframe.frameBorder=0;
-      iframe.width="1px";
-      iframe.height="1px";
-      iframe.id="spProxy";
-      iframe.setAttribute("src", proxyHackUrl);
-      $document[0].getElementById("content-footer").appendChild(iframe);
-
-
-      //getDocumentLocation();
-    }
-
-    
-
-    // function selectedTextChanged() {
-    //   Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
-    //     function (result) {
-    //       if (result.status === Office.AsyncResultStatus.Succeeded) {
-    //         vm.searchQuery = result.value;
-    //         $scope.$apply();
-    //       }
-    //       else {
-    //         console.error(result.error.message);
-    //       }
-    //     });
-    // }
-
-    function searchQueryKeyDown($event) {
-      var query = event.target.value.toLowerCase();
-      if (/*$event.keyCode === 13 ||*/ query.length > 2) {
-        
-        $(".board").each(function (i, b) {
-          var brd = $(b);
-          if (brd.find(".board-title").text().toLowerCase().indexOf(query) >= 0){
-            brd.show();
-          }
-          else{
-            brd.hide();
-          }
-        });
-        //vm.getFilteredBoards(vm.searchQuery);
-      }
-      else {
-        $(".board").each(function (i, b) {
-          var brd = $(b);
-          brd.show();
-        });
-      }
-    }
-
-    function getFilteredBoards(query) {
-      vm.loading = true;
-      vm.documents.length = 0;
-
-      dataService.getFilteredBoards(query).then(function (documents) {
-        documents.forEach(function (document) {
-          vm.documents.push(document);
-        });
-
+    /**
+     * Controller constructor
+     */
+    function homeController($scope, $document, dataService, proxyHackUrl) {
+        var vm = this;
+        vm.searchQuery = '';
+        vm.loaded = false;
         vm.loading = false;
-        vm.hasSearched = true;
-      });
-    }
+        vm.currentDocLocation = null;
+        vm.boards = [];
+        vm.search = searchQuery;
+        vm.noBoardsShown = function () {
+            if (vm.noBoardsLoaded()) return false;
+            var noBoards = true;
+            vm.boards.forEach(function (b, i) {
+                if (b.controller.visibleInFilter) {
+                    noBoards = false;
+                }
+            });
+            return noBoards;
+        };
+        vm.noBoardsLoaded = function () {
+            return vm.loaded && vm.boards.length == 0;
+        };
 
-    function getAllBoards() {
-      vm.loading = true;
-      vm.documents.length = 0;
+        activate();
 
-      dataService.getAllBoards().then(function (documents) {
-        documents.forEach(function (document) {
-          vm.documents.push(document);
-        });
+        function activate() {
+            getDocumentLocation();
+            loadAllBoards();            
+        }
 
-        vm.loading = false;
-        vm.hasSearched = true;
-      });
-    }
-  }
+        function searchQuery(clearSearch) {
+            var query = vm.searchQuery.toLowerCase();
+            if (query.length < 3 || clearSearch) {
+                vm.boards.forEach(function (b, i) {
+                    b.controller.visibleInFilter = true;
+                });
+            } else {
+                vm.boards.forEach(function (b, i) {
+                    b.controller.visibleInFilter = b.title.toLowerCase().indexOf(query) >= 0;
+                });
+            }
+            console.log("Clear Search: " + clearSearch);
+            $scope.$applyAsync();
+        }
 
+        function getDocumentLocation() {
+            //Note: This will return "undefined" when the document is embedded in a webpage.
+            Office.context.document.getFilePropertiesAsync(
+              function (asyncResult) {
+                  if (asyncResult.status == "failed") {
+                      //TODO: later.
+                      //showMessage("Action failed with error: " + asyncResult.error.message);
+                  } else {
+                      vm.currentDocLocation = asyncResult.value.url;
+                  }
+              }
+            );
+        }
+
+        function loadAllBoards() {
+            vm.loading = true;
+            vm.boards.length = 0;
+
+            dataService.getAllBoards().then(function (boards) {
+                boards.forEach(function (board) {
+                    vm.boards.push(board);
+                });
+                vm.loading = false;
+                vm.loaded = true;
+            });
+        }
+    }    
 })();
