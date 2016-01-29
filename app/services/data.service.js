@@ -11,7 +11,8 @@
         // public signature of the service
         return {
             getAllBoards: getBoards,
-            getBoardDocuments: getBoardDocuments
+            getBoardDocuments: getBoardDocuments,
+            getDocumentByUrl: getDocumentByUrl
         };
 
         /** *********************************************************** */
@@ -31,6 +32,37 @@
                 }
             }
             return value;
+        }
+
+        function getDocumentByUrl(docUrl) {
+                var deferred = $q.defer();
+            var searchQuery = "?QueryText=%27Path:" + docUrl + "%27&SelectProperties=%27Title,Path%27";
+            $http({
+                url: sharePointUrl + '/_api/search/query' + searchQuery,
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json;odata=nometadata'
+                }
+            }).success(function (data) {
+                var document = {
+                    title: undefined,
+                    url:docUrl
+                };
+                if (data.PrimaryQueryResult !== null) {
+                    data.PrimaryQueryResult.RelevantResults.Table.Rows.forEach(function (row) {
+                        var cells = row.Cells;
+                        var url = getValueFromResults('Path', cells);
+                        if (url === docUrl) {
+                            document.title =  getValueFromResults('Title', cells);
+                        }
+                    });
+                }
+                deferred.resolve(document);
+
+            }).error(function (err) {
+                deferred.reject(err);
+            });
+            return deferred.promise;
         }
 
         function getBoardDocuments(board) {

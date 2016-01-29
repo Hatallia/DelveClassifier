@@ -11,7 +11,10 @@
         vm.selected = false;
         vm.loading = false;
         vm.loaded = false;
-        vm.docLocation = "";
+        vm.docInfo = {
+            location: "",
+            title: ""
+        };
         vm.getBoardDocuments = getBoardDocuments;
         vm.noDocs = function () { return $scope.boardDocuments.length == 0; }
         vm.$scope = $scope;
@@ -38,9 +41,10 @@
             //put here any initializers
         }        
 
-        function loadBoardDocuments(currentDocLocation) {
+        function loadBoardDocuments(currentDocInfo) {
             $scope.board.controller = this;
-            vm.docLocation = currentDocLocation;
+            vm.docInfo.location = currentDocInfo.location;
+            vm.docInfo.title = currentDocInfo.title;
             getBoardDocuments($scope.board);
         }
 
@@ -51,13 +55,29 @@
 
         function toggleBoardSelected(event) {
             event.originalEvent.preventDefault();
-            //var elem = event.currentTarget;
-            //$(elem).parents(".board").toggleClass('selected');
+
+            //update list of documents for current board
+            if (vm.selected) {
+                $scope.boardDocuments.forEach(function (d, i) {
+                    if (d.url == vm.docInfo.location) {
+                        $scope.boardDocuments.splice(i, 1);
+                    }
+                });
+            }
+            else {
+                $scope.boardDocuments.push({
+                    url: vm.docInfo.location,
+                    title: vm.docInfo.title
+                });
+            }
+            sortBoardDocuments();
+            
+            //change state of board
             vm.selected = !vm.selected;
             $scope.$applyAsync();
 
             //ToDo: send request to add/remove current document to/from board
-            var message = { board: $scope.board.title, docLocation: vm.docLocation };
+            var message = { board: $scope.board.title, docLocation: vm.docInfo.location };
             //$document[0].getElementById("spProxy").contentWindow.postMessage(JSON.stringify(message), azureOrigin);
         }
 
@@ -85,12 +105,26 @@
             dataService.getBoardDocuments(board).then(function (documents) {
                 documents.forEach(function (document) {
                     $scope.boardDocuments.push(document);
-                    if (document.url == vm.docLocation) {
+                    if (document.url == vm.docInfo.location) {
                         vm.selected = true;
                     }
+                    sortBoardDocuments();
                 });
                 vm.loading = false;
                 vm.loaded = true;
+            });
+        }
+
+        function sortBoardDocuments() {
+            $scope.boardDocuments.sort(function (a, b) {
+                if (a.title > b.title) {
+                    return 1;
+                }
+                if (a.title < b.title) {
+                    return -1;
+                }
+                // a must be equal to b
+                return 0;
             });
         }
     }

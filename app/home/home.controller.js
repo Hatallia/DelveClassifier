@@ -11,7 +11,10 @@
         vm.searchQuery = '';
         vm.loaded = false;
         vm.loading = false;
-        vm.currentDocLocation = null;
+        vm.currentDoc = {
+            location: null,
+            title: null
+        };
         vm.boards = [];
         vm.search = searchQuery;
         vm.noBoardsShown = function () {
@@ -31,8 +34,7 @@
         activate();
 
         function activate() {
-            getDocumentLocation();
-            loadAllBoards();            
+            loadDocumentLocation();                     
         }
 
         function searchQuery(clearSearch) {
@@ -50,7 +52,7 @@
             $scope.$applyAsync();
         }
 
-        function getDocumentLocation() {
+        function loadDocumentLocation() {
             //Note: This will return "undefined" when the document is embedded in a webpage.
             Office.context.document.getFilePropertiesAsync(
               function (asyncResult) {
@@ -58,10 +60,18 @@
                       //TODO: later.
                       //showMessage("Action failed with error: " + asyncResult.error.message);
                   } else {
-                      vm.currentDocLocation = asyncResult.value.url;
+                      vm.currentDoc.location = asyncResult.value.url;
+                      loadDocumentInfo();
                   }
               }
             );
+        }
+
+        function loadDocumentInfo() {
+            dataService.getDocumentByUrl(vm.currentDoc.location).then(function (document) {
+                vm.currentDoc.title = document.title;
+                loadAllBoards();
+            });
         }
 
         function loadAllBoards() {

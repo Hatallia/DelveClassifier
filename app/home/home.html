@@ -24,7 +24,7 @@
     <div id="content-main">
         <div class="padding" ng-show="vm.loaded === true && vm.loading === false && vm.boards.length > 0">
             <div ng-repeat="board in vm.boards">
-                <div ng-controller="boardController as bc" ng-init="loadBoardDocuments(vm.currentDocLocation)" ng-class="getBoardClass()" ng-show="visibleInFilter">
+                <div ng-controller="boardController as bc" ng-init="loadBoardDocuments(vm.currentDoc)" ng-class="getBoardClass()" ng-show="visibleInFilter">
                     <div class="board-name" ng-click="toggleBoardSelected($event, board)">
                         <span class="board-icon" ng-click="expandCollapsBoard($event)"><i ng-class="isOpened ? 'ms-Icon ms-Icon--caretDownRight' : 'ms-Icon ms-Icon--caretRightOutline'"><a href="{{::currentBoard.url}}" /></i></span>
                         <span class="board-title">{{::board.title}}</span>
