@@ -285,8 +285,8 @@ body {
     border-color: #005A9E !important;
 }
 
-.ms-SearchBox-field {
-    
+.ms-SearchBox-field::-ms-clear {
+    display: none;
 }
 
 .ms-SearchBox-field:focus,

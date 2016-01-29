@@ -48,7 +48,6 @@
                     b.controller.visibleInFilter = b.title.toLowerCase().indexOf(query) >= 0;
                 });
             }
-            console.log("Clear Search: " + clearSearch);
             $scope.$applyAsync();
         }
 
