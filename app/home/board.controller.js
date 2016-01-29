@@ -54,6 +54,9 @@
         }
 
         function toggleBoardSelected(event) {
+            if (event.currentTarget.querySelector(".ms-Icon.ms-Icon--arrowUpRight") == event.target) {
+                return;
+            }
             event.originalEvent.preventDefault();
 
             //update list of documents for current board

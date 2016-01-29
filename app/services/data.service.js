@@ -118,7 +118,7 @@
                 if (data.PrimaryQueryResult !== null) {
                     data.PrimaryQueryResult.RelevantResults.Table.Rows.forEach(function (row) {
                         var cells = row.Cells;
-                        var url = sharePointUrl + '_layouts/15/me.aspx?b=' + getValueFromResults('Title', cells);
+                        var url = sharePointUrl + '/_layouts/15/me.aspx?b=' + getValueFromResults('Title', cells);
                         boards.push({
                             url: url,
                             title: getValueFromResults('Title', cells),
