@@ -51,6 +51,7 @@
         function expandCollapsBoard(event) {
             expandCollapsBoardUI(event);
             //getBoardDocuments(document);
+			dataService.getFormDigest();
         }
 
         function toggleBoardSelected(event) {
