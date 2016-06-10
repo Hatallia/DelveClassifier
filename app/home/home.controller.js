@@ -1,12 +1,12 @@
 (function () {
     'use strict';
 
-    angular.module('officeAddin').controller('homeController', ['$scope', '$document', 'dataService', 'proxyHackUrl', homeController]);
+    angular.module('officeAddin').controller('homeController', ['$scope', '$document', 'dataService', "proxyPageUrl", "sharePointUrl", homeController]);
 
     /**
      * Controller constructor
      */
-    function homeController($scope, $document, dataService, proxyHackUrl) {
+    function homeController($scope, $document, dataService, proxyPageUrl, sharePointUrl) {
         var vm = this;
         vm.searchQuery = '';
         vm.loaded = false;
@@ -34,7 +34,12 @@
         activate();
 
         function activate() {
+            initProxyPageContainer();
             loadDocumentLocation();                     
+        }
+
+        function initProxyPageContainer() {
+            $("#proxyPageContainer").html("<iframe id='spProxyPage' src='" + sharePointUrl + proxyPageUrl + "' style='width: 1px; height: 1px;'></iframe>");
         }
 
         function searchQuery(clearSearch) {

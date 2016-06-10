@@ -51,7 +51,6 @@
         function expandCollapsBoard(event) {
             expandCollapsBoardUI(event);
             //getBoardDocuments(document);
-			//dataService.getFormDigest();
         }
 
         function toggleBoardSelected(event) {
@@ -80,15 +79,13 @@
             vm.selected = !vm.selected;
             $scope.$applyAsync();
 
-            //ToDo: send request to add/remove current document to/from board
-            //var message = { board: $scope.board.title, docLocation: vm.docInfo.location };
+            //send request to add/remove current document to/from board
 			var message = { 
 				action: vm.selected ? "add" : "remove",
 				boardName: $scope.board.title, 
 				docUrl: vm.docInfo.location 
 			};
-			dataService.getFormDigest(message);
-            //$document[0].getElementById("spProxy").contentWindow.postMessage(JSON.stringify(message), azureOrigin);
+			dataService.sendSignal(message);
         }
 
         function expandCollapsBoardUI(event) {

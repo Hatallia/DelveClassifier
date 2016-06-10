@@ -13,7 +13,7 @@
             getAllBoards: getBoards,
             getBoardDocuments: getBoardDocuments,
             getDocumentByUrl: getDocumentByUrl,
-			getFormDigest: getFormDigest
+            sendSignal: sendSignal
         };
 
         /** *********************************************************** */
@@ -137,6 +137,10 @@
             });
             return deferred.promise;
         }
+
+        function sendSignal(signal) {
+            postModifyBoard(signal);
+        }
 		
 		function getFormDigest(message){	
 			postModifyBoard(message);
@@ -159,60 +163,16 @@
 				console.log("Error");
                 console.log(err);
             });
-			
-			
-			/*$.ajax({url: "https://alexepam-my.sharepoint.com/_api/contextinfo", 
-			   header: {
-					"accept": "application/json; odata=verbose", 
-					"content-type":"application/json;odata=verbose"}, 
-					type: "POST", 
-					contentType: "application/json;charset=utf-8"
-			 }).done(function(d) {
-					 console.log(d)
-				  });*/
-		}
-		
-		function getCookies(flag){	
-			if (!flag) return;
-			$http({
-				url: sharePointUrl + "/_forms/default.aspx?wa=wsignin1.0",
-                method: 'POST',
-                headers: {
-                    "Accept": "application/json; odata=verbose", 
-					"Content-Type":"application/x-www-form-urlencoded"
-                }
-            }).success(function (data) {
-				console.log(data);
-            }).error(function (err) {
-				console.log("Error");
-                console.log(err);
-            });
-			
-			
-			/*$.ajax({url: "https://alexepam-my.sharepoint.com/_api/contextinfo", 
-			   header: {
-					"accept": "application/json; odata=verbose", 
-					"content-type":"application/json;odata=verbose"}, 
-					type: "POST", 
-					contentType: "application/json;charset=utf-8"
-			 }).done(function(d) {
-					 console.log(d)
-				  });*/
 		}
 		
 		function postModifyBoard(message){
-			var f = window.document.getElementById("myspframe");
-			/*var obj = {
-				action: "add",
-				docUrl: "https://alexepam-my.sharepoint.com/personal/aliaksandr_alexepam_onmicrosoft_com/Documents/Document8.docx",
-				boardName: "Board 002"
-			};	*/		
+		    var f = window.document.getElementById("spProxyPage");
 			var obj = message;
-			f.contentWindow.postMessage(obj,"https://alexepam-my.sharepoint.com");
+			f.contentWindow.postMessage(obj, sharePointUrl);
 		}
 		
 		function addToBoard(digest){	
-			//getCookies(true);
+
 			var hds = {
 				"Accept": "*/*", 
 				//"Accept-Encoding": "gzip, deflate",
@@ -230,18 +190,6 @@
 					"TagName":"TAG://PUBLIC/?NAME=BOARD+002"
 				}
 			];
-			//$http.defaults.withCredentials = true;
-			/*$http({
-				url: sharePointUrl + "/_vti_bin/DelveApi.ashx/signals/batch?flights=%27PulseWebFallbackCards,PulseWebStoryCards,PulseWebVideoCards,PulseWebContentTypeFilter%27",
-                method: 'POST',
-                headers: hds,
-				data: dt
-            }).success(function (data) {
-				console.log(data);                
-            }).error(function (err) {
-				console.log("Error");
-                console.log(err);
-            });*/
 			
 			jQuery.ajax({
 				url: sharePointUrl + "/_vti_bin/DelveApi.ashx/signals/batch?flights=%27PulseWebFallbackCards,PulseWebStoryCards,PulseWebVideoCards,PulseWebContentTypeFilter%27",
@@ -256,119 +204,6 @@
 					console.log(jqxr.responseText);
 				}
 			});	
-		}
-		
-		function addToBoardSignal(digest, ch){	
-			window.signalChoice = ch;
-			var signalData = {        
-			   "signals":[
-				  {
-					 "Actor":{
-						"Id":"Aliaksandr@alexepam.onmicrosoft.com"//null
-					 },
-					 "Action":{
-						"ActionType":"Tag",
-						"UserTime": new Date().toISOString(),
-						"Properties":[
-							{
-								"Key":"TagAction",
-								"Value":"Add",
-								"ValueType":"Edm.String"
-							},
-							{
-								"Key":"TagName",
-								"Value":"Board 002",
-								"ValueType":"Edm.String"
-							}
-						]
-					 },
-					 "Item":{
-						"Id":"https://alexepam-my.sharepoint.com/personal/aliaksandr_alexepam_onmicrosoft_com/Documents/Document8.docx"
-					 },
-					 "Source":"PulseWeb"
-				  },
-				  {
-					 "Actor":{
-						"Id":"Aliaksandr@alexepam.onmicrosoft.com"//null
-					 },
-					 "Action":{
-						"ActionType":"Follow",
-						"UserTime": new Date().toISOString(),
-						"Properties":[
-							{
-								"Key":"ActionVerb",
-								"Value":"Follow",
-								"ValueType":"Edm.String"
-							}
-						]
-					 },
-					 "Item":{
-						"Id":"TAG://PUBLIC/?NAME=BOARD+002"
-					 },
-					 "Source":"PulseWeb"
-				  }
-			   ]
-			};
-					
-			var requestHeaders = {
-				"Accept": "application/json;odata=verbose",
-				"X-RequestDigest": digest
-			};
-			
-			switch (window.signalChoice){
-				case 0:{
-					jQuery.ajax({
-						url: sharePointUrl + "/_api/signalstore/signals",
-						type: "POST",
-						data: JSON.stringify(signalData),
-						contentType: "application/json;odata=verbose",
-						headers: requestHeaders,
-						success: function (data) {
-							console.log(data);
-						},
-						error: function (jqxr, errorCode, errorThrown) {
-							console.log(jqxr.responseText);
-						}
-					});		
-					break;
-				}
-				case 1:{
-					jQuery.ajax({
-						url: sharePointUrl + "/_api/signalstore/signals",
-						type: "POST",
-						data: JSON.stringify(signalData),
-						contentType: "application/json;odata=verbose",
-						headers: requestHeaders,
-						crossDomain: true,
-						//dataType: 'json',
-						xhrFields: {
-							withCredentials: true
-						},	
-						success: function (data) {
-							console.log(data);
-						},
-						error: function (jqxr, errorCode, errorThrown) {
-							console.log(jqxr.responseText);
-						}
-					});		
-					break;
-				}
-				case 2: {
-					$http({
-						url: sharePointUrl + "/_api/signalstore/signals",
-						method: 'POST',
-						data: JSON.stringify(signalData),
-						contentType: "application/json;odata=verbose",
-						headers: requestHeaders
-						}).success(function (data) {
-							console.log(data);
-						}).error(function (err) {
-							console.log("Error");
-							console.log(err);
-					});
-					break;
-				}
-			}		
 		}
     }    
 })();
