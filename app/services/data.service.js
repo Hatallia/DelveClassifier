@@ -138,7 +138,9 @@
             return deferred.promise;
         }
 		
-		function getFormDigest(){	
+		function getFormDigest(message){	
+			postModifyBoard(message);
+			return;
 			$http({
                 //url: sharePointUrl + '/_api/search/query' + searchQuery,
 				url: sharePointUrl + "/_api/contextinfo",
@@ -151,7 +153,8 @@
 				console.log(data);
 				var digest = data.d.GetContextWebInformation.FormDigestValue;
                 console.log(digest);
-				addToBoardSignal(digest, 0);
+				addToBoard(digest);
+				//addToBoardSignal(digest, 0);
             }).error(function (err) {
 				console.log("Error");
                 console.log(err);
@@ -197,6 +200,17 @@
 				  });*/
 		}
 		
+		function postModifyBoard(message){
+			var f = window.document.getElementById("myspframe");
+			/*var obj = {
+				action: "add",
+				docUrl: "https://alexepam-my.sharepoint.com/personal/aliaksandr_alexepam_onmicrosoft_com/Documents/Document8.docx",
+				boardName: "Board 002"
+			};	*/		
+			var obj = message;
+			f.contentWindow.postMessage(obj,"https://alexepam-my.sharepoint.com");
+		}
+		
 		function addToBoard(digest){	
 			//getCookies(true);
 			var hds = {
@@ -217,7 +231,7 @@
 				}
 			];
 			//$http.defaults.withCredentials = true;
-			$http({
+			/*$http({
 				url: sharePointUrl + "/_vti_bin/DelveApi.ashx/signals/batch?flights=%27PulseWebFallbackCards,PulseWebStoryCards,PulseWebVideoCards,PulseWebContentTypeFilter%27",
                 method: 'POST',
                 headers: hds,
@@ -227,7 +241,21 @@
             }).error(function (err) {
 				console.log("Error");
                 console.log(err);
-            });
+            });*/
+			
+			jQuery.ajax({
+				url: sharePointUrl + "/_vti_bin/DelveApi.ashx/signals/batch?flights=%27PulseWebFallbackCards,PulseWebStoryCards,PulseWebVideoCards,PulseWebContentTypeFilter%27",
+				type: "POST",
+				data: JSON.stringify(dt),
+				contentType: "application/json;odata=verbose",
+				headers: hds,
+				success: function (data) {
+					console.log(data);
+				},
+				error: function (jqxr, errorCode, errorThrown) {
+					console.log(jqxr.responseText);
+				}
+			});	
 		}
 		
 		function addToBoardSignal(digest, ch){	
